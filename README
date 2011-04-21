@@ -8,6 +8,8 @@ location lists.
 Though the main functionality of this script is to make editing of quickfix
 entries easy.
 
+This script can be downloaded from https://github.com/jceb/vim-editqf
+
 USAGE:
 Create entries in the quickfix list by either running special a command
 like :make or :grep or add a note by pressing <leader>n. Then bring up the

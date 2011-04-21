@@ -7,45 +7,47 @@
 " @vi           : ft=vim:tw=80:sw=4:ts=8
 "
 " @Description  :
-" DESCRIPTION:
-" This script is a reimplementation and continuation of the QuickFixNotes
-" script (http://www.vim.org/scripts/script.php?script_id=2216). Besides the
-" original functionality of capturing notes and storing them in a file, this
-" script provides commands for easily loading the stored data, also for
-" location lists.
+"  DESCRIPTION:
+"  This script is a reimplementation and continuation of the QuickFixNotes
+"  script (http://www.vim.org/scripts/script.php?script_id=2216). Besides the
+"  original functionality of capturing notes and storing them in a file, this
+"  script provides commands for easily loading the stored data, also for
+"  location lists.
 "
-" Though the main functionality of this script is to make editing of quickfix
-" entries easy.
+"  Though the main functionality of this script is to make editing of quickfix
+"  entries easy.
 "
-" USAGE:
-" Create entries in the quickfix list by either running special a command
-" like :make or :grep or add a note by pressing <leader>n. Then bring up the
-" quickfix window by running the command :cw.
+"  This script can be downloaded from https://github.com/jceb/vim-editqf
 "
-" When you are in the quickfix window navigate to the entry you want to
-" change. Just press any key that would bring in into insert mode or change
-" the text like "i".  Automatically a new window will be opened containing
-" all entries of the quickfix window.
+"  USAGE:
+"  Create entries in the quickfix list by either running special a command
+"  like :make or :grep or add a note by pressing <leader>n. Then bring up the
+"  quickfix window by running the command :cw.
 "
-" You can use the regular editing commands for editing the entries. Once
-" you're done, just save the buffer and leave or close the window. I
-" recommend using :x, because this command does both with just one command.
-" After that you are brought back to the error you initially started editing
-" in the quickfix window.
+"  When you are in the quickfix window navigate to the entry you want to
+"  change. Just press any key that would bring in into insert mode or change
+"  the text like "i".  Automatically a new window will be opened containing
+"  all entries of the quickfix window.
 "
-" Additionally the plugin provides the following commands that support
-" storing and restoring quickfix and location lists:
-" 	:SaveQF <FILENAME>
-" 	:LoadQF <FILENAME>  " default is to append to the current quickfix list
-" 	:LoadQF! <FILENAME> " replace quickfix list with the contents of file
-" 	:AddNoteQF [NOTE]   " add quickfix entry with message NOTE
-" 	:AddNoteQF! [NOTE]  " like :AddNoteQF but start a new quickfix list
+"  You can use the regular editing commands for editing the entries. Once
+"  you're done, just save the buffer and leave or close the window. I
+"  recommend using :x, because this command does both with just one command.
+"  After that you are brought back to the error you initially started editing
+"  in the quickfix window.
 "
-" 	:SaveLoc <FILENAME>
-" 	:LoadLoc <FILENAME>  " default is to append to the current location list
-" 	:LoadLoc! <FILENAME> " replace location list with the contents of file
-" 	:AddNoteLoc [NOTE]   " add location entry with message NOTE
-" 	:AddNoteLoc! [NOTE]  " like :AddNoteLoc but start a new location list
+"  Additionally the plugin provides the following commands that support
+"  storing and restoring quickfix and location lists:
+"  	:SaveQF <FILENAME>
+"  	:LoadQF <FILENAME>  " default is to append to the current quickfix list
+"  	:LoadQF! <FILENAME> " replace quickfix list with the contents of file
+"  	:AddNoteQF [NOTE]   " add quickfix entry with message NOTE
+"  	:AddNoteQF! [NOTE]  " like :AddNoteQF but start a new quickfix list
+"
+"  	:SaveLoc <FILENAME>
+"  	:LoadLoc <FILENAME>  " default is to append to the current location list
+"  	:LoadLoc! <FILENAME> " replace location list with the contents of file
+"  	:AddNoteLoc [NOTE]   " add location entry with message NOTE
+"  	:AddNoteLoc! [NOTE]  " like :AddNoteLoc but start a new location list
 "
 " CUSTOMIZATION:
 " The default filename for storing and loading quickfix and location lists is
