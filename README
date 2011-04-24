@@ -1,4 +1,4 @@
-DESCRIPTION:
+Description:
 This script is a reimplementation and continuation of the QuickFixNotes
 script (http://www.vim.org/scripts/script.php?script_id=2216). Besides the
 original functionality of capturing notes and storing them in a file, this
@@ -10,7 +10,7 @@ entries easy.
 
 This script can be downloaded from https://github.com/jceb/vim-editqf
 
-USAGE:
+Usage:
 Create entries in the quickfix list by either running special a command
 like :make or :grep or add a note by pressing <leader>n. Then bring up the
 quickfix window by running the command :cw.
@@ -33,25 +33,64 @@ storing and restoring quickfix and location lists:
 	:LoadQF! <FILENAME> " replace quickfix list with the contents of file
 	:AddNoteQF [NOTE]   " add quickfix entry with message NOTE
 	:AddNoteQF! [NOTE]  " like :AddNoteQF but start a new quickfix list
+	:AddNoteQFPattern[!] [NOTE]   " add quickfix entry matching the pattern of the current line
 
 	:SaveLoc <FILENAME>
 	:LoadLoc <FILENAME>  " default is to append to the current location list
 	:LoadLoc! <FILENAME> " replace location list with the contents of file
 	:AddNoteLoc [NOTE]   " add location entry with message NOTE
 	:AddNoteLoc! [NOTE]  " like :AddNoteLoc but start a new location list
+	:AddNoteLocPattern[!] [NOTE]   " add location entry matching the pattern of the current line
 
-CUSTOMIZATION:
+Editqf has integrated support for the hier script
+(http://www.github.com/jceb/vim-hier) which highlights quickfix errors to
+make them more visible.
+Customization:
 The default filename for storing and loading quickfix and location lists is
 customizable by setting the following variables in your vimrc:
-	let g:saveqf_filename = "quickfix.list"
-	let g:saveloc_filename = "location.list"
+	let g:editqf_saveqf_filename  = "quickfix.list"
+	let g:editqf_saveloc_filename = "location.list"
+
+Jump to the edited error when editing finished:
+	let g:editqf_jump_to_error    = 1
 
 The default keybinding <leader>n for adding a quickfix note can be
 customized by defining a mapping in your vimrc:
 	nmap <leader>n <Plug>AddNoteQF
+	nmap <leader>N <Plug>AddNoteQFPattern
 	nmap <leader>l <Plug>AddNoteLoc
+	nmap <leader>L <Plug>AddNoteLocPattern
 
-INSTALLATION DETAILS:
+Installation Details:
 1. Download editqf.vim
 2. Move file to $HOME/.vim/plugin
 3. Restart vim
+
+Known Issues:
+- When trying to edit a location list the quickfix list is opened instead!
+  This is because it's not possible to tell the difference between a
+  quickfix and a location list from vim script. A workaround is to open the
+  location list manually: :e loc:list
+- When opening a location list (filename loc:list) in a new window the
+  location list of that window is opened instead! Location lists should
+  always be edited by running :e loc:list. Once editing finished C-^
+  should be used to leave the location list and go back to the last edited
+  buffer
+- Mapping <Plug>AddNoteQFPattern and <Plug>AddNoteLocPattern doesn't work
+  quite well because vim seems to execute <Plug>AddNoteQF with paramter
+  Pattern instead
+
+Changelog:
+1.1
+- improve support for hier script
+- add g:editqf_jump_to_error variablew to make jumping to the last selected
+  error optional
+- prefix save-filename variable with plugin name
+- move all functionality from Edit to Read function to allow editing of
+  qf:list and loc:list directly through vim commands (:e, :sp ...)
+- add support for patterns matching instead of line numbers
+- add description of quickfix/location fields to the editing buffer
+- fix issue when deleting all entries from quickfix/location list
+
+1.0
+- initial release
