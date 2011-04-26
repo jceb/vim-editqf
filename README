@@ -6,7 +6,7 @@ DESCRIPTION                    |editqf-description|
 USAGE                          |editqf-usage|
 CUSTOMIZATION                  |editqf-customization|
 INSTALLATION                   |editqf-installation|
-INSTALLATION                   |editqf-issues|
+KNOWN ISSUE                    |editqf-issues|
 CHANGELOG                      |editqf-changelog|
 
 ==========================================================================
@@ -87,8 +87,8 @@ customized by defining a mapping in your vimrc:
 ==========================================================================
 INSTALLATION                                           *editqf-installation*
 
-1. Download editqf.vim
-2. Move file to $HOME/.vim/plugin
+1. Download editqf.vba.gz 
+2. Open file in vim and run :so % to install plugin 
 3. Restart vim
 
 ==========================================================================
