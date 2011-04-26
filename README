@@ -60,8 +60,8 @@ storing and restoring quickfix and location lists:
 	:LocAddNotePattern[!] [NOTE] " add location entry matching the pattern of the current line
 
 Editqf has integrated support for the hier script
-(http://www.github.com/jceb/vim-hier) which highlights quickfix errors to
-make them more visible.
+(http://www.vim.org/scripts/script.php?script_id=3564) which highlights
+quickfix errors to make them more visible.
 
 ==========================================================================
 CUSTOMIZATION                                         *editqf-customization*
