@@ -1,4 +1,4 @@
-*editqf.txt*		For Vim version 7.3	       Last change: 2011 July 03
+*editqf.txt*		For Vim version 7.3	   Last change: 2011 August 27
 
 ==============================================================================
 EditQF                                                       *editqf* *editqf-toc*
@@ -20,6 +20,9 @@ provides commands for easily loading the stored data, also for location lists.
 
 Though the main functionality of this script is to make editing of quickfix
 entries easy.
+
+I did a screencast giving an overview of the basic functionality of this
+plugin. It's available at vimeo: http://vimeo.com/jceb/editqf
 
 This script can be downloaded from
 http://www.vim.org/scripts/script.php?script_id=3557. The latest development
