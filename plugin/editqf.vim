@@ -31,12 +31,14 @@ nmap <Plug>QFAddNotePattern :QFAddNotePattern<CR>
 nmap <Plug>LocAddNote :LocAddNote<CR>
 nmap <Plug>LocAddNotePattern :LocAddNotePattern<CR>
 
-if ! hasmapto("<Plug>QFAddNote", "n")
-	nmap <leader>n <Plug>QFAddNote
-endif
+if !exists("g:editqf_no_mappings") || !g:editqf_no_mappings
+	if !hasmapto("<Plug>QFAddNote", "n")
+		nmap <leader>n <Plug>QFAddNote
+	endif
 
-if ! hasmapto("<Plug>AddNoteQFPattern", "n")
-	nmap <leader>N <Plug>QFAddNotePattern
+	if !hasmapto("<Plug>AddNoteQFPattern", "n")
+		nmap <leader>N <Plug>QFAddNotePattern
+	endif
 endif
 
 function! s:Getlist(winnr, type)
