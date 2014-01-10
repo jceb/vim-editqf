@@ -45,11 +45,12 @@ done, just save the buffer and leave or close the window. I recommend using :x,
 because this command does both with just one command.  After that you are
 brought back to the error you initially started editing in the quickfix window.
 
-For changing the type of a quickfix entry from within the quickfix window three
+For changing the type of a quickfix entry from within the quickfix window five
 convenience shortcuts are provided:
 - I -> info
 - W -> warning
 - E -> error
+- << and >> -> cycle through the different types
 
 Additionally the plugin provides the following commands that support
 storing and restoring quickfix and location lists:

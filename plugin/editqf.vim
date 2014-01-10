@@ -26,10 +26,10 @@ command! -nargs=* -bang LocAddNotePattern :call <SID>AddNote("<bang>", "loc", 'p
 command! -nargs=? -bang -complete=file LocSave :call <SID>Save("<bang>", "loc", <f-args>)
 command! -nargs=? -bang -complete=file LocLoad :call <SID>Load("<bang>", "loc", <f-args>)
 
-nmap <Plug>QFAddNote :QFAddNote<CR>
-nmap <Plug>QFAddNotePattern :QFAddNotePattern<CR>
-nmap <Plug>LocAddNote :LocAddNote<CR>
-nmap <Plug>LocAddNotePattern :LocAddNotePattern<CR>
+nnoremap <Plug>QFAddNote :QFAddNote<CR>
+nnoremap <Plug>QFAddNotePattern :QFAddNotePattern<CR>
+nnoremap <Plug>LocAddNote :LocAddNote<CR>
+nnoremap <Plug>LocAddNotePattern :LocAddNotePattern<CR>
 
 if !exists("g:editqf_no_mappings") || !g:editqf_no_mappings
 	if !hasmapto("<Plug>QFAddNote", "n")
@@ -122,6 +122,7 @@ function! <SID>AddNote(bang, type, matchtype, ...)
 	else
 		call s:Setlist(0, a:type, [entry], "a")
 	endif
+	echom "Note added."
 
 	if exists(':HierUpdate')
 		HierUpdate
@@ -194,8 +195,7 @@ function! <SID>Cleanup(loadqf)
 
 	" delete every empty line - empty lines cause empty entries in quickfix
 	" list
-	silent! g/^\s*$/d
-	silent! g/^bufnr:/d
+	silent! g/^\(\s*$\|bufnr:\)/d
 
 	let empty_list = 0
 	if getline(1) == ""
@@ -309,21 +309,34 @@ function! <SID>Read(fname)
 	setlocal tw=0 fo-=trwnaocl
 endfunction
 
-function! <SID>ChangeType(type)
+function! <SID>ChangeType(...)
 	" change the type of the quickfix entry the cursor is currently on
 	let l:line = line(".")
 	let l:col = col(".") - 1
 	let l:qf = getqflist()
+	let l:types = ['I', 'W', 'E']
 
 	if len(l:qf) < l:line
 		return
 	endif
 
 	" change type of current error
-	let l:qf[l:line - 1]['type'] = a:type
+	if a:0 >= 1
+		if index(l:types, a:1) >= 0
+			let l:qf[l:line - 1]['type'] = a:1
+		else
+			let l:qf[l:line - 1]['type'] = l:types[(index(l:types, l:qf[l:line - 1]['type']) + a:1) % len(l:types)]
+		endif
+	else
+		let l:qf[l:line - 1]['type'] = l:types[(index(l:types, l:qf[l:line - 1]['type']) + 1) % len(l:types)]
+	endif
 	call setqflist(l:qf, 'r')
 	exec "normal ".l:line."G0" . l:col . "l"
 endfunction
+
+nnoremap <Plug>QFEdit :<C-u>if !exists('s:current_bufnr')<Bar>call <SID>Edit()<Bar>endif<CR>
+nnoremap <Plug>QFPreviousType :call <SID>ChangeType(-1)<CR>
+nnoremap <Plug>QFNextType :call <SID>ChangeType(+1)<CR>
 
 augroup qf
 	au!
@@ -332,7 +345,10 @@ augroup qf
 	for i in ["I", "W", "E"]
 		exec "au BufReadPost quickfix nnoremap <silent> <buffer> ".i." :call <SID>ChangeType('".i."')<CR>"
 	endfor
+	au BufReadPost quickfix nmap <silent> <buffer> << <Plug>QFPreviousType
+	au BufReadPost quickfix nmap <silent> <buffer> >> <Plug>QFNextType
+
 	for i in ["i", "a", "c", "o", "p", "r", "s", "d", "x", "A", "C", "O", "P", "R", "S", "D", "X"]
-		exec "au BufReadPost quickfix nnoremap <silent> <buffer> ".i." :if !exists('s:current_bufnr')<Bar>call <SID>Edit()<Bar>endif<CR>"
+		exec "au BufReadPost quickfix nmap <silent> <buffer> ".i." <Plug>QFEdit"
 	endfor
 augroup END
