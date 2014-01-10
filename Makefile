@@ -4,10 +4,10 @@ VIMPLUGINDIR = $(HOME)/.vim/bundle/editqf
 
 all: clean vba
 
-${PLUGIN}.vba: README plugin/${PLUGIN}.vim
+${PLUGIN}.vba: README plugin/${PLUGIN}.vim autoload/${PLUGIN}.vim
 	mkdir -p doc
 	cp README doc/${PLUGIN}.txt
-	find doc plugin -type f | sed -e 's/^\.\/// '> files
+	find doc plugin autoload -type f | sed -e 's/^\.\/// '> files
 	vim --cmd 'let g:plugin_name="${PLUGIN}"' -s build_vba.vim
 	[ -e ${PLUGIN}.vmb ] && mv ${PLUGIN}.vmb $@
 
