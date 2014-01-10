@@ -2,8 +2,8 @@
 " Author:         Jan Christoph Ebersbach (jceb@e-jc.de)
 " License:        GPL (see http://www.gnu.org/licenses/gpl.txt)
 " Created:        2008-11-28
-" Last Modified: Fri 10. Jan 2014 22:03:49 +0100 CET
-" Revision:       1.2
+" Last Modified: Fri 10. Jan 2014 22:22:18 +0100 CET
+" Revision:       1.4
 " vi:             ft=vim:tw=80:sw=4:ts=8
 
 if exists("g:loaded_editqf_auto") || &cp
