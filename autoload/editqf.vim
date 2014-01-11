@@ -1,8 +1,9 @@
 " editqf.vim -- make quickfix entries editable
 " Author:         Jan Christoph Ebersbach (jceb@e-jc.de)
+" Copyright:      2011, 2012, 2013, Jan Christoph Ebersbach
 " License:        GPL (see http://www.gnu.org/licenses/gpl.txt)
 " Created:        2008-11-28
-" Revision:       1.4
+" Revision:       1.5
 " vi:             ft=vim:tw=80:sw=4:ts=8
 
 if exists("g:loaded_editqf_auto") || &cp
