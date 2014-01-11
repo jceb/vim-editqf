@@ -2,7 +2,6 @@
 " Author:         Jan Christoph Ebersbach (jceb@e-jc.de)
 " License:        GPL (see http://www.gnu.org/licenses/gpl.txt)
 " Created:        2008-11-28
-" Last Modified: Fri 10. Jan 2014 22:22:18 +0100 CET
 " Revision:       1.4
 " vi:             ft=vim:tw=80:sw=4:ts=8
 
@@ -168,7 +167,7 @@ function! editqf#Cleanup(loadqf)
 
 	" delete every empty line - empty lines cause empty entries in quickfix
 	" list
-	silent! g/^\(\s*$\|bufnr:\)/d
+	silent g/^\(\s*$\|bufnr:\)/d
 
 	let empty_list = 0
 	if getline(1) == ""
@@ -231,7 +230,7 @@ function! editqf#Edit()
 	let type = 'qf'
 
 	" split a new window and open quickfix/location list for editing
-	exec "silent! ".winheight(0)."sp"
+	exec "silent ".winheight(0)."sp"
 	if type == "qf"
 		e qf:list
 	else

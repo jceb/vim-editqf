@@ -121,6 +121,9 @@ KNOWN ISSUES                                                     *editqf-issues*
 ==============================================================================
 CHANGELOG                                                     *editqf-changelog*
 
+1.5
+- don't suppress error messages
+
 1.4
 - add << and >> to cycle through quickfix types
 - move logic to an autoload plugin
