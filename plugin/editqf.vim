@@ -15,15 +15,15 @@ let g:editqf_saveloc_filename        = !exists("g:editqf_saveloc_filename")     
 let g:editqf_jump_to_error           = !exists("g:editqf_jump_to_error")           ? 1               : g:editqf_jump_to_error
 let g:editqf_store_absolute_filename = !exists("g:editqf_store_absolute_filename") ? 1               : g:editqf_store_absolute_filename
 
-command! -nargs=* -bang QFAddNote              :<C-u>call editqf#AddNote("<bang>", "qf", 'l', <f-args>)
-command! -nargs=* -bang QFAddNotePattern       :<C-u>call editqf#AddNote("<bang>", "qf", 'p', <f-args>)
-command! -nargs=? -bang -complete=file QFSave  :<C-u>call editqf#Save("<bang>", "qf", <f-args>)
-command! -nargs=? -bang -complete=file QFLoad  :<C-u>call editqf#Load("<bang>", "qf", <f-args>)
+command! -nargs=* -bang QFAddNote              :call editqf#AddNote("<bang>", "qf", 'l', <f-args>)
+command! -nargs=* -bang QFAddNotePattern       :call editqf#AddNote("<bang>", "qf", 'p', <f-args>)
+command! -nargs=? -bang -complete=file QFSave  :call editqf#Save("<bang>", "qf", <f-args>)
+command! -nargs=? -bang -complete=file QFLoad  :call editqf#Load("<bang>", "qf", <f-args>)
 
-command! -nargs=* -bang LocAddNote             :<C-u>call editqf#AddNote("<bang>", "loc", 'l', <f-args>)
-command! -nargs=* -bang LocAddNotePattern      :<C-u>call editqf#AddNote("<bang>", "loc", 'p', <f-args>)
-command! -nargs=? -bang -complete=file LocSave :<C-u>call editqf#Save("<bang>", "loc", <f-args>)
-command! -nargs=? -bang -complete=file LocLoad :<C-u>call editqf#Load("<bang>", "loc", <f-args>)
+command! -nargs=* -bang LocAddNote             :call editqf#AddNote("<bang>", "loc", 'l', <f-args>)
+command! -nargs=* -bang LocAddNotePattern      :call editqf#AddNote("<bang>", "loc", 'p', <f-args>)
+command! -nargs=? -bang -complete=file LocSave :call editqf#Save("<bang>", "loc", <f-args>)
+command! -nargs=? -bang -complete=file LocLoad :call editqf#Load("<bang>", "loc", <f-args>)
 
 nnoremap <Plug>QFAddNote         :QFAddNote<CR>
 nnoremap <Plug>QFAddPatternNote  :QFAddNotePattern<CR>

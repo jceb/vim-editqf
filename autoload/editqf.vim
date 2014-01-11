@@ -26,21 +26,6 @@ function! editqf#Setlist(winnr, type, list, action)
 	endif
 endfunction
 
-function! editqf#RemoveEmptyPattern(winnr, type)
-	let l = []
-	let found_empty_pattern = 0
-	for i in editqf#Getlist(a:winnr, a:type)
-		if i.pattern == '^\V3MPT1\$'
-			unlet i.pattern
-			let found_empty_pattern = 1
-		endif
-		call add(l, i)
-	endfor
-	if found_empty_pattern == 1
-		call editqf#Setlist(a:winnr, a:type, l, 'r')
-	endif
-endfunction
-
 function! editqf#AddNote(bang, type, matchtype, ...)
 	" @param	type		qf or loc
 	" @param	matchtype	l(ine number) or p(attern)
@@ -112,17 +97,17 @@ function! editqf#Save(bang, type, ...)
 		let items = []
 		let winnr = a:type == 'qf' ? '' : 0
 		for i in editqf#Getlist(winnr, a:type)
-			let pattern = i.pattern
-			if pattern != '' && len(pattern) >= 5
-				let pattern = pattern[3:-3]
-			else
-				let pattern = '3MPT1'
-			endif
 			let type = i.type
 			if i.type == ''
 				let type = 'E'
 			endif
-			call add(items, bufname(i.bufnr) . ':' . type . ':' . i.lnum . ':' . i.col . ':' . pattern . ':' . i.text)
+			let pattern = i.pattern
+			if pattern != '' && len(pattern) >= 5
+				let pattern = pattern[3:-3]
+				call add(items, bufname(i.bufnr) . ':' . type . ':/' . pattern . '/:' . i.text)
+			else
+				call add(items, bufname(i.bufnr) . ':' . type . ':' . i.lnum . ':' . i.col . :' . i.text)
+			endif
 		endfor
 		call writefile(items, fnameescape(file))
 	else
@@ -145,11 +130,9 @@ function! editqf#Load(bang, type, ...)
 	if filereadable(fnameescape(file)) == 1
 			let tmp_efm = &efm
 			" set efm to the format used to store errors in a file
-			set efm=%f:%t:%l:%c:%s:%m
+			set efm=%f:%t:/%s/:%m,%f:%t:%l:%c:%m
 			exec get." ".fnameescape(file)
 			let &efm=tmp_efm
-
-			call editqf#RemoveEmptyPattern(0, a:type)
 	else
 		echomsg "Unable to open file " . file
 	endif
@@ -194,14 +177,12 @@ function! editqf#Cleanup(loadqf)
 		if empty_list == 0
 			let tmp_efm = &efm
 			" set efm to the format used to store errors in a file
-			set efm=%f:%t:%l:%c:%s:%m
+			set efm=%f:%t:/%s/:%m,%f:%t:%l:%c:%m
 			exec get." ".s:current_bufnr
-
-			call editqf#RemoveEmptyPattern(s:current_winnr, s:current_type)
 			let &efm=tmp_efm
 		endif
 		" prepend column information again
-		call append(0, ['bufnr:type:lnum:col:pattern:text'])
+		call append(0, ['bufnr:type:(lnum:col|/pattern/):text'])
 		set nomodified
 	endif
 
@@ -242,7 +223,7 @@ function! editqf#Edit()
 endfunction
 
 function! editqf#Read(fname)
-	let items = ['bufnr:type:lnum:col:pattern:text']
+	let items = ['bufnr:type:(lnum:col|/pattern/):text']
 	let type = 'qf'
 	if fnamemodify(a:fname, ':t') == 'loc:list'
 		let type = 'loc'
@@ -256,17 +237,17 @@ function! editqf#Read(fname)
 	" workaround for difficulties handling pattern and line number
 	" matches together
 	for i in editqf#Getlist(s:current_winnr, s:current_type)
-		let pattern = i.pattern
-		if pattern != '' && len(pattern) >= 5
-			let pattern = pattern[3:-3]
-		else
-			let pattern = '3MPT1'
-		endif
 		let type = i.type
 		if i.type == ''
 			let type = 'E'
 		endif
-		call add(items, bufname(i.bufnr) . ':' . type . ':' . i.lnum . ':' . i.col . ':' . pattern . ':' . i.text)
+		let pattern = i.pattern
+		if pattern != '' && len(pattern) >= 5
+			let pattern = pattern[3:-3]
+			call add(items, bufname(i.bufnr) . ':' . type . ':/' . pattern . '/:' . i.text)
+		else
+			call add(items, bufname(i.bufnr) . ':' . type . ':' . i.lnum . ':' . i.col . ':' . i.text)
+		endif
 	endfor
 	call append(0, items)
 	normal Gdd

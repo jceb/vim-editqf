@@ -122,7 +122,8 @@ KNOWN ISSUES                                                     *editqf-issues*
 CHANGELOG                                                     *editqf-changelog*
 
 1.5
-- don't suppress error messages
+- remove workaround with an empty line number or search pattern
+- don't suppress error messages anymore
 
 1.4
 - add << and >> to cycle through quickfix types
