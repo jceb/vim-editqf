@@ -10,7 +10,8 @@ if exists("g:loaded_editqf_auto") || &cp
 endif
 let g:loaded_editqf_auto = 1
 
-function! editqf#Getlist(winnr, type)
+function! <SID>Getlist(winnr, type)
+	" retrieve qf or location list
 	if a:type == 'qf'
 		return getqflist()
 	else
@@ -18,12 +19,32 @@ function! editqf#Getlist(winnr, type)
 	endif
 endfunction
 
-function! editqf#Setlist(winnr, type, list, action)
+function! <SID>Setlist(winnr, type, list, action)
+	" set qf or location list
 	if a:type == 'qf'
 		call setqflist(a:list, a:action)
 	else
 		call setloclist(a:winnr, a:list, a:action)
 	endif
+endfunction
+
+function! <SID>Formatlist(list)
+	" build a list of formatted strings from the items of a qf or location list
+	let res = []
+	for i in a:list
+		let type = i.type
+		if i.type == ''
+			let type = 'E'
+		endif
+		let pattern = i.pattern
+		if pattern != '' && len(pattern) >= 5
+			let pattern = pattern[3:-3]
+			call add(res, bufname(i.bufnr).':'.type.':/'.pattern.'/:'.i.text)
+		else
+			call add(res, bufname(i.bufnr).':'.type.':'.i.lnum.':'.i.col.':'.i.text)
+		endif
+	endfor
+	return res
 endfunction
 
 function! editqf#AddNote(bang, type, matchtype, ...)
@@ -74,9 +95,9 @@ function! editqf#AddNote(bang, type, matchtype, ...)
 	let entry["type"]     = "I"
 
 	if a:bang == '!'
-		call editqf#Setlist(0, a:type, [entry], "r")
+		call <SID>Setlist(0, a:type, [entry], "r")
 	else
-		call editqf#Setlist(0, a:type, [entry], "a")
+		call <SID>Setlist(0, a:type, [entry], "a")
 	endif
 	redraw!
 	echom "Note added."
@@ -94,21 +115,8 @@ function! editqf#Save(bang, type, ...)
 	let file = expand(file)
 
 	if (filewritable(fnameescape(file)) == 1 && a:bang == '!') || filereadable(fnameescape(file)) == 0
-		let items = []
 		let winnr = a:type == 'qf' ? '' : 0
-		for i in editqf#Getlist(winnr, a:type)
-			let type = i.type
-			if i.type == ''
-				let type = 'E'
-			endif
-			let pattern = i.pattern
-			if pattern != '' && len(pattern) >= 5
-				let pattern = pattern[3:-3]
-				call add(items, bufname(i.bufnr) . ':' . type . ':/' . pattern . '/:' . i.text)
-			else
-				call add(items, bufname(i.bufnr) . ':' . type . ':' . i.lnum . ':' . i.col . :' . i.text)
-			endif
-		endfor
+		let items = <SID>Formatlist(<SID>Getlist(winnr, a:type))
 		call writefile(items, fnameescape(file))
 	else
 		echomsg "File exists (add ! to override) " . file
@@ -142,7 +150,7 @@ function! editqf#Load(bang, type, ...)
 	endif
 endfunction
 
-function! editqf#Cleanup(loadqf)
+function! <SID>Cleanup(loadqf)
 	if ! exists("s:current_bufnr") || ! bufexists(s:current_bufnr)
 		return
 	endif
@@ -150,12 +158,12 @@ function! editqf#Cleanup(loadqf)
 
 	" delete every empty line - empty lines cause empty entries in quickfix
 	" list
-	silent g/^\(\s*$\|bufnr:\)/d
+	silent g/^\(\s*$\|filename:\)/d
 
 	let empty_list = 0
 	if getline(1) == ""
 		let empty_list = 1
-		call editqf#Setlist(s:current_winnr, s:current_type, [], 'r')
+		call <SID>Setlist(s:current_winnr, s:current_type, [], 'r')
 	endif
 
 	if a:loadqf == 0
@@ -182,7 +190,7 @@ function! editqf#Cleanup(loadqf)
 			let &efm=tmp_efm
 		endif
 		" prepend column information again
-		call append(0, ['bufnr:type:(lnum:col|/pattern/):text'])
+		call append(0, ['filename:type:(lnum:col|/pattern/):text'])
 		set nomodified
 	endif
 
@@ -223,7 +231,6 @@ function! editqf#Edit()
 endfunction
 
 function! editqf#Read(fname)
-	let items = ['bufnr:type:(lnum:col|/pattern/):text']
 	let type = 'qf'
 	if fnamemodify(a:fname, ':t') == 'loc:list'
 		let type = 'loc'
@@ -236,26 +243,15 @@ function! editqf#Read(fname)
 
 	" workaround for difficulties handling pattern and line number
 	" matches together
-	for i in editqf#Getlist(s:current_winnr, s:current_type)
-		let type = i.type
-		if i.type == ''
-			let type = 'E'
-		endif
-		let pattern = i.pattern
-		if pattern != '' && len(pattern) >= 5
-			let pattern = pattern[3:-3]
-			call add(items, bufname(i.bufnr) . ':' . type . ':/' . pattern . '/:' . i.text)
-		else
-			call add(items, bufname(i.bufnr) . ':' . type . ':' . i.lnum . ':' . i.col . ':' . i.text)
-		endif
-	endfor
+	let items = <SID>Formatlist(<SID>Getlist(s:current_winnr, s:current_type))
+	call insert(items, 'filename:type:(lnum:col|/pattern/):text')
 	call append(0, items)
 	normal Gdd
 
 	augroup qfbuffer
 		au!
-		au BufWriteCmd <buffer> call editqf#Cleanup(1)
-		au BufLeave <buffer> call editqf#Cleanup(0)
+		au BufWriteCmd <buffer> call <SID>Cleanup(1)
+		au BufLeave <buffer> call <SID>Cleanup(0)
 	augroup END
 
 	" prevent text from being wrapped

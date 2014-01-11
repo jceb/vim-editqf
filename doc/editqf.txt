@@ -122,6 +122,7 @@ KNOWN ISSUES                                                     *editqf-issues*
 CHANGELOG                                                     *editqf-changelog*
 
 1.5
+- remove redundant code to format lists
 - remove workaround with an empty line number or search pattern
 - don't suppress error messages anymore
 
