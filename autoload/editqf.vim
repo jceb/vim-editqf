@@ -155,6 +155,7 @@ function! <SID>Cleanup(loadqf)
 		return
 	endif
 	let get = s:current_type == 'qf' ? 'cgetbuffer' : 'lgetbuffer'
+	let cursor = getpos('.')
 
 	" delete every empty line - empty lines cause empty entries in quickfix
 	" list
@@ -192,6 +193,7 @@ function! <SID>Cleanup(loadqf)
 		" prepend column information again
 		call append(0, ['filename:type:(lnum:col|/pattern/):text'])
 		set nomodified
+		call setpos('.', cursor)
 	endif
 
 	if exists(':HierUpdate')
