@@ -49,9 +49,11 @@ augroup qf
 	au!
 	au BufReadCmd qf:list call editqf#Read(expand("<amatch>"))
 	au BufReadCmd loc:list call editqf#Read(expand("<amatch>"))
-	for i in ["I", "W", "E"]
-		exec "au BufReadPost quickfix nnoremap <silent> <buffer> ".i." :call editqf#ChangeType('".i."')<CR>"
-	endfor
+	if !exists("g:editqf_no_type_mappings") || !g:editqf_no_type_mappings
+		for i in ["I", "W", "E"]
+			exec "au BufReadPost quickfix nnoremap <silent> <buffer> ".i." :call editqf#ChangeType('".i."')<CR>"
+		endfor
+	endif
 	au BufReadPost quickfix nmap <silent> <buffer> << <Plug>QFPreviousType
 	au BufReadPost quickfix nmap <silent> <buffer> >> <Plug>QFNextType
 
