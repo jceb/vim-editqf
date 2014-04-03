@@ -95,8 +95,12 @@ customized by defining a mapping in your vimrc:
 	nmap <leader>l <Plug>LocAddNote
 	nmap <leader>L <Plug>LocAddNotePattern
 
-All mappings can be turned off by setting:
+The above mappings can be turned off by setting:
 	let g:editqf_no_mappings = 1
+
+The mappings to change the type of quickfix entry can be turned off by
+setting:
+	let g:editqf_no_type_mappings = 1
 
 ==============================================================================
 INSTALLATION                                               *editqf-installation*
