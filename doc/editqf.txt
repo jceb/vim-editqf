@@ -108,6 +108,12 @@ INSTALLATION                                               *editqf-installation*
 ==============================================================================
 KNOWN ISSUES                                                     *editqf-issues*
 
+- If the file that the cursor is on in the quickfix window, before entering the
+  edit mode, changes after editing, |:x| shouldn't be used to save and exit
+  edit mode.  This will break the quickfix window by opening the file with the
+  current error in the quickfix window.  Instead |:w| followed by a cursor
+  movement to a different window should be used.
+
 - When trying to edit a location list the quickfix list is opened instead!
   This is because it's not possible to tell the difference between a quickfix
   and a location list from vim script. A workaround is to open the location
