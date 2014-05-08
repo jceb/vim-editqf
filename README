@@ -131,6 +131,10 @@ KNOWN ISSUES                                                     *editqf-issues*
 ==============================================================================
 CHANGELOG                                                     *editqf-changelog*
 
+1.6 (not released yet)
+- Add editqf_no_type_mappings to disable "types"
+- make temporary filename more unlikely to be a local file
+
 1.5
 - preserve cursor position when saving qf or location list
 - remove redundant code to format lists
